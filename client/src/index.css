@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+
+html { scroll-behavior: smooth; }
+html:not(.dark) { color-scheme: light; }
+
+body {
+  @apply bg-ink-950 text-slate-200 antialiased font-sans;
+}
+html:not(.dark) body {
+  @apply bg-slate-50 text-slate-800;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+/* Reusable component classes */
+@layer components {
+  .container-x { @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8; }
+  .card {
+    @apply rounded-2xl border border-white/5 bg-ink-800/60 backdrop-blur-sm shadow-card transition-colors;
+  }
+  html:not(.dark) .card { @apply border-slate-200 bg-white; }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-60;
+  }
+  .btn-primary { @apply btn bg-accent text-white hover:bg-accent-soft hover:shadow-glow; }
+  .btn-ghost { @apply btn border border-white/10 text-slate-200 hover:border-accent/50 hover:text-white; }
+  html:not(.dark) .btn-ghost { @apply border-slate-300 text-slate-700 hover:text-slate-900; }
+  .chip {
+    @apply inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-300;
+  }
+  html:not(.dark) .chip { @apply border-slate-200 bg-slate-100 text-slate-600; }
+  .section-label { @apply text-sm font-semibold uppercase tracking-widest text-accent; }
+  .input {
+    @apply w-full rounded-xl border border-white/10 bg-ink-800/70 px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent;
+  }
+  html:not(.dark) .input { @apply border-slate-300 bg-white text-slate-800 placeholder:text-slate-400; }
+  .label { @apply mb-1.5 block text-xs font-medium text-slate-400; }
+  html:not(.dark) .label { @apply text-slate-600; }
+}
+
+/* Custom cursor (fine-pointer, motion-safe only; components self-disable otherwise) */
+@layer components {
+  .cursor-dot,
+  .cursor-ring {
+    @apply pointer-events-none fixed left-0 top-0 z-[70] rounded-full;
+    margin-left: -4px;
+    margin-top: -4px;
+    will-change: transform;
+  }
+  .cursor-dot {
+    height: 8px;
+    width: 8px;
+    background-color: theme('colors.accent.DEFAULT');
+  }
+  .cursor-ring {
+    height: 34px;
+    width: 34px;
+    margin-left: -17px;
+    margin-top: -17px;
+    border: 1.5px solid theme('colors.accent.DEFAULT');
+    opacity: 0.35;
+    transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease, margin 0.2s ease;
+  }
+  .cursor-ring--active {
+    height: 52px;
+    width: 52px;
+    margin-left: -26px;
+    margin-top: -26px;
+    opacity: 0.6;
+  }
+}
+
+/* Never hijack the native cursor on touch or reduced-motion setups. */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .cursor-dot,
+  .cursor-ring { display: none !important; }
+}

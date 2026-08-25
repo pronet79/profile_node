@@ -1,0 +1,18 @@
+{
+  "name": "pradosh-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Premium full-stack developer portfolio (MERN) for Pradosh Mukherjee",
+  "workspaces": ["client", "server"],
+  "scripts": {
+    "dev": "concurrently -n API,WEB -c blue,green \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "npm --workspace server run dev",
+    "dev:client": "npm --workspace client run dev",
+    "build": "npm --workspace client run build",
+    "start": "npm --workspace server run start",
+    "seed": "npm --workspace server run seed"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,107 @@
+# ---------------------------------------------------------------------------
+# Dependencies (root + workspaces)
+# ---------------------------------------------------------------------------
+node_modules/
+client/node_modules/
+server/node_modules/
+.pnp/
+.pnp.js
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# ---------------------------------------------------------------------------
+# Environment / secrets  — NEVER commit these
+# Keep the checked-in template: .env.example
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+client/.env
+client/.env.*
+!client/.env.example
+server/.env
+server/.env.*
+!server/.env.example
+
+# ---------------------------------------------------------------------------
+# Build output
+# ---------------------------------------------------------------------------
+dist/
+build/
+client/dist/
+client/build/
+.vite/
+*.tsbuildinfo
+
+# ---------------------------------------------------------------------------
+# User-uploaded files (resume PDF, local-disk image fallback)
+# These are runtime data, not source — keep the folder, ignore its contents.
+# ---------------------------------------------------------------------------
+server/uploads/*
+!server/uploads/.gitkeep
+# Root-level uploads dir (created if the server is run from the repo root)
+/uploads/
+
+# ---------------------------------------------------------------------------
+# Tests / coverage
+# ---------------------------------------------------------------------------
+coverage/
+.nyc_output/
+*.lcov
+.vitest/
+
+# mongodb-memory-server downloaded binaries (integration tests)
+.cache/mongodb-binaries/
+.mongodb-binaries/
+
+# ---------------------------------------------------------------------------
+# Logs & debug
+# ---------------------------------------------------------------------------
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ---------------------------------------------------------------------------
+# Editor / IDE
+# ---------------------------------------------------------------------------
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+*~
+
+# ---------------------------------------------------------------------------
+# OS cruft
+# ---------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ---------------------------------------------------------------------------
+# Misc
+# ---------------------------------------------------------------------------
+*.pid
+*.seed
+*.pid.lock
+.tmp/
+tmp/
+*.local
