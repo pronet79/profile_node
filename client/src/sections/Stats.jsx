@@ -2,8 +2,8 @@ import { useCountUp } from '../hooks/useCountUp.js';
 
 const stats = [
   { end: 10, suffix: '+', label: 'Years Experience' },
-  { end: 350, suffix: '+', label: 'Successful Projects Shipped' },
-  { end: 80, suffix: '+', label: 'Happy Clients' },
+  { end: 150, suffix: '+', label: 'Successful Projects Shipped' },
+  { end: 50, suffix: '+', label: 'Happy Clients' },
   { end: 100, suffix: '%', label: 'On-time Delivery' },
 ];
 
