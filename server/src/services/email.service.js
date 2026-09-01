@@ -9,6 +9,9 @@ if (env.smtp.enabled) {
     port: env.smtp.port,
     secure: env.smtp.port === 465,
     auth: { user: env.smtp.user, pass: env.smtp.password },
+    connectionTimeout: 10000,   // 10s
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
   });
 }
 
