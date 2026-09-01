@@ -13,7 +13,7 @@ const contactSchema = new mongoose.Schema(
     budget: { type: String },
     message: { type: String, required: true, trim: true, maxlength: 5000 },
     status: { type: String, enum: ['new', 'read', 'replied', 'archived'], default: 'new', index: true },
-    ipHash: { type: String },
+    ipHash: { type: String  },
   },
   { timestamps: true }
 );
