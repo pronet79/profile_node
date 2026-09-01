@@ -1,39 +1,63 @@
-import nodemailer from 'nodemailer';
 import { env } from '../config/env.js';
 import { logger } from '../utils/logger.js';
 
-let transporter = null;
-if (env.smtp.enabled) {
-  transporter = nodemailer.createTransport({
-    host: env.smtp.host,
-    port: env.smtp.port,
-    secure: env.smtp.port === 465,
-    auth: { user: env.smtp.user, pass: env.smtp.password },
-    connectionTimeout: 10000,   // 10s
-    greetingTimeout: 10000,
-    socketTimeout: 15000,
-  });
-}
+/*
+  Email delivery via the Brevo HTTP API (https://api.brevo.com), NOT SMTP.
+  Many hosts (e.g. Railway) block outbound SMTP ports, which causes
+  "Connection timeout" errors. The HTTP API uses port 443, which is open,
+  so this is the reliable way to send from a cloud host.
 
-/* Fails soft: email problems should never break the API request flow. */
+  Required env vars:
+    BREVO_API_KEY      - from Brevo → SMTP & API → API Keys
+    MAIL_FROM_EMAIL    - a sender verified in Brevo → Senders
+    MAIL_FROM_NAME     - display name for the sender (optional)
+    ADMIN_NOTIFY_EMAIL - owner address that receives notifications
+
+  Fails soft: email problems never break the API request flow.
+*/
+
+const BREVO_API_KEY = process.env.BREVO_API_KEY || '';
+const FROM = {
+  email: process.env.MAIL_FROM_EMAIL || env.smtp.from || 'no-reply@example.com',
+  name: process.env.MAIL_FROM_NAME || 'Pradosh Mukherjee',
+};
+const emailEnabled = Boolean(BREVO_API_KEY);
+
 async function send({ to, subject, html }) {
-  if (!transporter) {
-    logger.warn(`[email] SMTP disabled — skipped "${subject}" to ${to}`);
+  if (!emailEnabled || !to) {
+    logger.warn(`[email] Email not configured (BREVO_API_KEY missing) — skipped "${subject}" to ${to}`);
     return { skipped: true };
   }
-  if (!to) return { skipped: true };
   try {
-    const info = await transporter.sendMail({ from: env.smtp.from, to, subject, html });
-    logger.info(`[email] Sent "${subject}" to ${to} (${info.messageId})`);
-    return info;
+    const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'api-key': BREVO_API_KEY,
+        'content-type': 'application/json',
+        accept: 'application/json',
+      },
+      body: JSON.stringify({
+        sender: FROM,
+        to: [{ email: to }],
+        subject,
+        htmlContent: html,
+      }),
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      logger.error(`[email] Brevo failed "${subject}" to ${to}: ${res.status} ${text}`);
+      return { error: `${res.status} ${text}` };
+    }
+    logger.info(`[email] Sent "${subject}" to ${to} via Brevo API`);
+    return { ok: true };
   } catch (err) {
-    logger.error(`[email] Failed "${subject}" to ${to}: ${err.message}`);
+    logger.error(`[email] Brevo error "${subject}" to ${to}: ${err.message}`);
     return { error: err.message };
   }
 }
 
 const inr = (n) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
-const owner = () => env.smtp.adminNotify;
+const owner = () => process.env.ADMIN_NOTIFY_EMAIL || env.smtp.adminNotify;
 
 export const emailService = {
   /* ---------------------- CONTACT ---------------------- */
@@ -52,7 +76,6 @@ export const emailService = {
   },
 
   /* -------------------- TESTIMONIALS (feedback) -------------------- */
-  // Owner: a new testimonial is awaiting review.
   async notifyNewTestimonial(t) {
     return send({
       to: owner(),
@@ -65,7 +88,6 @@ export const emailService = {
              <p><b>Message:</b><br/>${t.message}</p>`,
     });
   },
-  // Client: acknowledgement that their feedback was received.
   async sendTestimonialAckToClient(t) {
     return send({
       to: t.email,
@@ -76,7 +98,6 @@ export const emailService = {
              <p>I appreciate you taking the time to share it.</p>`,
     });
   },
-  // Client: their testimonial was approved or rejected.
   async sendTestimonialStatusToClient(t) {
     if (!t.email) return;
     if (t.status === 'approved') {
@@ -98,7 +119,6 @@ export const emailService = {
   },
 
   /* ---------------------- DONATIONS (payment) ---------------------- */
-  // Client: payment status (successful or failed).
   async sendPaymentStatusToClient(d) {
     if (!d.email) return;
     if (d.status === 'successful') {
@@ -120,7 +140,6 @@ export const emailService = {
              <p><b>Reference:</b> ${d.orderId}</p>`,
     });
   },
-  // Owner: a payment succeeded or failed.
   async notifyPaymentToOwner(d) {
     const ok = d.status === 'successful';
     return send({
