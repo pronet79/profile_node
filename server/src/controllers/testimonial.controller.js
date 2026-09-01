@@ -27,7 +27,9 @@ export const submit = asyncHandler(async (req, res) => {
   if (dupe) throw ApiError.conflict('You have already submitted this feedback.');
 
   const t = await Testimonial.create({ ...req.body, status: 'pending', ipHash });
-  emailService.notifyNewTestimonial(t); // fire-and-forget
+  // Notify both: owner gets a review request, client gets an acknowledgement (fire-and-forget)
+  emailService.notifyNewTestimonial(t);
+  emailService.sendTestimonialAckToClient(t);
   return sendSuccess(res, {
     statusCode: 201,
     message: 'Thank you! Your feedback has been submitted for review.',
@@ -48,6 +50,8 @@ export const setStatus = asyncHandler(async (req, res) => {
   if (!['pending', 'approved', 'rejected'].includes(status)) throw ApiError.badRequest('Invalid status');
   const t = await Testimonial.findByIdAndUpdate(req.params.id, { status }, { new: true });
   if (!t) throw ApiError.notFound('Testimonial not found');
+  // Let the client know the outcome (fire-and-forget)
+  if (status === 'approved' || status === 'rejected') emailService.sendTestimonialStatusToClient(t);
   return sendSuccess(res, { message: `Testimonial ${status}`, data: t });
 });
 

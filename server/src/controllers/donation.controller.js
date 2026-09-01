@@ -39,6 +39,9 @@ export const verifyPayment = asyncHandler(async (req, res) => {
   if (!valid) {
     donation.status = 'failed';
     await donation.save();
+    // Notify both parties of the failure (fire-and-forget)
+    emailService.sendPaymentStatusToClient(donation);
+    emailService.notifyPaymentToOwner(donation);
     throw ApiError.badRequest('Payment verification failed');
   }
 
@@ -47,9 +50,9 @@ export const verifyPayment = asyncHandler(async (req, res) => {
   donation.status = 'successful';
   await donation.save();
 
-  // fire-and-forget notifications
-  emailService.sendDonationReceipt(donation);
-  emailService.notifyDonation(donation);
+  // Notify both parties of the successful payment (fire-and-forget)
+  emailService.sendPaymentStatusToClient(donation);
+  emailService.notifyPaymentToOwner(donation);
 
   return sendSuccess(res, {
     message: 'Thank you for supporting my work ❤️',
