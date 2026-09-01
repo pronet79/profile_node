@@ -59,10 +59,13 @@ export default function AdminLayout() {
       </aside>
 
       <div className="flex-1">
-        {/* Mobile top bar */}
-        <div className="flex items-center justify-between border-b border-white/5 p-4 md:hidden">
-          <span className="font-bold">Admin</span>
-          <button onClick={handleLogout} className="btn-ghost h-9 !px-3 text-xs"><LogOut className="h-4 w-4" /> Logout</button>
+        {/* Top bar — visible on every screen size, always shows Logout */}
+        <div className="sticky top-0 z-30 flex items-center justify-between border-b border-white/5 bg-ink-950/80 px-5 py-3 backdrop-blur sm:px-8">
+          <span className="font-semibold md:hidden">Admin</span>
+          <span className="hidden text-sm text-slate-400 md:block">Signed in as {admin?.email}</span>
+          <button onClick={handleLogout} className="btn-ghost h-9 !px-3 text-xs">
+            <LogOut className="h-4 w-4" /> Logout
+          </button>
         </div>
         <main className="p-5 sm:p-8"><Outlet /></main>
       </div>
