@@ -13,6 +13,8 @@ export const update = asyncHandler(async (req, res) => {
   Object.assign(s, req.body);
   if (req.body.social) Object.assign(s.social, req.body.social);
   if (req.body.seo) Object.assign(s.seo, req.body.seo);
+  // Replace the stats array wholesale when provided (Mongoose tracks the change).
+  if (Array.isArray(req.body.stats)) s.stats = req.body.stats;
   await s.save();
   return sendSuccess(res, { message: 'Settings updated', data: s });
 });

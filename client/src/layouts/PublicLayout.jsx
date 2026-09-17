@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import ScrollProgress from '../components/ScrollProgress.jsx';
 import CustomCursor from '../components/CustomCursor.jsx';
+import SupportModal from '../components/SupportModal.jsx';
 
 export default function PublicLayout() {
   return (
@@ -10,6 +11,8 @@ export default function PublicLayout() {
       {/* Read progress + accent cursor (both self-disable on touch / reduced-motion) */}
       <ScrollProgress />
       <CustomCursor />
+      {/* Donation overlay, opened from the footer "Support My Work" link */}
+      <SupportModal />
       {/* Subtle background grid + accent glow */}
       <div className="pointer-events-none fixed inset-0 -z-10 bg-grid-dark bg-[size:44px_44px] opacity-40" />
       <div className="pointer-events-none fixed left-1/2 top-0 -z-10 h-[500px] w-[900px] -translate-x-1/2 rounded-full bg-accent/10 blur-[140px]" />

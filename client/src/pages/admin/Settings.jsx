@@ -27,6 +27,43 @@ function Field({ label, path, textarea, form, set }) {
   );
 }
 
+/* Repeatable editor for the animated stat counters. Module scope keeps input
+   focus stable across re-renders (same reason as Field above). */
+function StatsEditor({ stats, onChange }) {
+  const update = (i, key, val) => {
+    const next = stats.map((s, idx) => (idx === i ? { ...s, [key]: val } : s));
+    onChange(next);
+  };
+  const add = () => onChange([...stats, { value: '', suffix: '+', label: '' }]);
+  const remove = (i) => onChange(stats.filter((_, idx) => idx !== i));
+
+  return (
+    <div className="space-y-3">
+      {stats.map((s, i) => (
+        <div key={i} className="grid grid-cols-[70px_60px_1fr_auto] items-end gap-2">
+          <div>
+            <label className="label">Value</label>
+            <input className="input" value={s.value || ''} onChange={(e) => update(i, 'value', e.target.value)} placeholder="10" />
+          </div>
+          <div>
+            <label className="label">Suffix</label>
+            <input className="input" value={s.suffix || ''} onChange={(e) => update(i, 'suffix', e.target.value)} placeholder="+" />
+          </div>
+          <div>
+            <label className="label">Label</label>
+            <input className="input" value={s.label || ''} onChange={(e) => update(i, 'label', e.target.value)} placeholder="Years Experience" />
+          </div>
+          <button type="button" onClick={() => remove(i)} className="btn-ghost h-10 !px-3 text-xs text-red-400">Remove</button>
+        </div>
+      ))}
+      {stats.length < 4 && (
+        <button type="button" onClick={add} className="btn-ghost h-9 !px-3 text-xs">+ Add stat</button>
+      )}
+      <p className="text-xs text-slate-500">Numeric values animate (count-up). Up to 4 shown on the site.</p>
+    </div>
+  );
+}
+
 export default function AdminSettings() {
   const { data, loading } = useApi('/settings');
   const toast = useToast();
@@ -84,11 +121,38 @@ export default function AdminSettings() {
         <section className="card p-6">
           <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-accent">Hero & Social</h2>
           <Field label="Hero heading" path="heroHeading" textarea form={form} set={set} />
+          <div className="mt-4"><Field label="Hero sub-heading" path="heroSubheading" textarea form={form} set={set} /></div>
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
             <Field label="GitHub" path="social.github" form={form} set={set} />
             <Field label="LinkedIn" path="social.linkedin" form={form} set={set} />
             <Field label="Fiverr" path="social.fiverr" form={form} set={set} />
           </div>
+        </section>
+
+        <section className="card p-6">
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-accent">About Section</h2>
+          <Field label="About heading" path="aboutHeading" form={form} set={set} />
+          <div className="mt-4"><Field label="Paragraph 1 (also used as Bio)" path="bio" textarea form={form} set={set} /></div>
+          <div className="mt-4"><Field label="Paragraph 2" path="aboutParagraph2" textarea form={form} set={set} /></div>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <Field label="Specialization" path="specialization" form={form} set={set} />
+            <Field label="Experience (e.g. 10+ Years)" path="yearsExperience" form={form} set={set} />
+          </div>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <Field label="Development philosophy" path="philosophy" textarea form={form} set={set} />
+            <Field label="Technical strengths" path="strengths" textarea form={form} set={set} />
+          </div>
+        </section>
+
+        <section className="card p-6">
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-accent">Stats (animated counters)</h2>
+          <StatsEditor stats={form.stats || []} onChange={(next) => set('stats', next)} />
+        </section>
+
+        <section className="card p-6">
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-accent">“Have a Project in Mind?” CTA</h2>
+          <Field label="Heading" path="projectCtaHeading" form={form} set={set} />
+          <div className="mt-4"><Field label="Text" path="projectCtaText" textarea form={form} set={set} /></div>
         </section>
 
         <section className="card p-6">

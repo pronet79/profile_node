@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
-import { Github, Linkedin, Mail, Briefcase } from 'lucide-react';
+import { Github, Linkedin, Mail, Briefcase, Heart } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext.jsx';
+import { useSupport } from '../context/SupportContext.jsx';
 
 export default function Footer() {
-  const { name, role, social, email } = useSettings();
+  const { name, role, social, email, donationEnabled } = useSettings();
+  const { openSupport } = useSupport();
   const year = new Date().getFullYear();
 
   const socials = [
@@ -54,7 +56,21 @@ export default function Footer() {
       </div>
       <div className="border-t border-white/5">
         <div className="container-x flex flex-col items-center justify-between gap-2 py-5 text-xs text-slate-500 sm:flex-row">
-          <p>© {year} {name || 'Pradosh Mukherjee'}. All rights reserved.</p>
+          <p className="flex flex-wrap items-center justify-center gap-x-1.5">
+            <span>© {year} {name || 'Pradosh Mukherjee'}. All rights reserved.</span>
+            {donationEnabled !== false && (
+              <>
+                <span className="text-slate-600">·</span>
+                <button
+                  type="button"
+                  onClick={openSupport}
+                  className="inline-flex items-center gap-1 font-medium text-accent transition-colors hover:text-accent-soft"
+                >
+                  <Heart className="h-3 w-3" /> Support My Work
+                </button>
+              </>
+            )}
+          </p>
           <p>Built with React, Node.js & MongoDB.</p>
         </div>
       </div>

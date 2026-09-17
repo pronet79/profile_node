@@ -13,7 +13,7 @@ const codeLines = [
 ];
 
 export default function Hero() {
-  const { social, email, heroHeading } = useSettings();
+  const { social, email, heroHeading, heroSubheading } = useSettings();
   const socials = [
     { href: social?.github, label: 'GitHub', Icon: Github },
     { href: social?.linkedin, label: 'LinkedIn', Icon: Linkedin },
@@ -41,8 +41,8 @@ export default function Hero() {
             )}
           </motion.h1>
           <motion.p variants={fadeUp} className="mt-6 max-w-xl text-lg text-slate-400">
-            10+ years of experience building scalable SaaS platforms, ERP systems, APIs, real-time
-            applications and AI-powered solutions using Laravel, PHP, Node.js and React.
+            {heroSubheading ||
+              '10+ years of experience building scalable SaaS platforms, ERP systems, APIs, real-time applications and AI-powered solutions using Laravel, PHP, Node.js and React.'}
           </motion.p>
 
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
