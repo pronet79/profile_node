@@ -6,7 +6,6 @@ const stats = [
   { end: 25, suffix: '+', label: 'Technologies & Tools' },
   { end: 6, suffix: '+', label: 'Business Domains' },
 ];
-
 function Stat({ end, suffix, label }) {
   const { ref, value } = useCountUp(end);
   return (
