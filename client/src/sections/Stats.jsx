@@ -2,9 +2,9 @@ import { useCountUp } from '../hooks/useCountUp.js';
 
 const stats = [
   { end: 10, suffix: '+', label: 'Years Experience' },
-  { end: 150, suffix: '+', label: 'Successful Projects Shipped' },
-  { end: 25, suffix: '+', label: 'Happy Clients' },
-  { end: 100, suffix: '%', label: 'On-time Delivery' },
+  { end: 50, suffix: '+', label: 'Successful Projects Shipped' },
+  { end: 25, suffix: '+', label: 'Technologies & Tools' },
+  { end: 'Multiple', suffix: ' ', label: 'Business Domains' },
 ];
 
 function Stat({ end, suffix, label }) {
