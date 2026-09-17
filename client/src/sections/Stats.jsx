@@ -4,7 +4,7 @@ const stats = [
   { end: 10, suffix: '+', label: 'Years Experience' },
   { end: 50, suffix: '+', label: 'Successful Projects Shipped' },
   { end: 25, suffix: '+', label: 'Technologies & Tools' },
-  { end: 'Multiple', suffix: ' ', label: 'Business Domains' },
+  { end: 6, suffix: '+', label: 'Business Domains' },
 ];
 
 function Stat({ end, suffix, label }) {
