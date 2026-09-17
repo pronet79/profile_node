@@ -7,7 +7,6 @@ const stats = [
   { end: 'Multiple', suffix: ' ', label: 'Business Domains' },
 ];
 
-
 function Stat({ end, suffix, label }) {
   const { ref, value } = useCountUp(end);
   return (
