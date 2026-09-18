@@ -20,10 +20,20 @@ export function createApp() {
   // (e.g. locally-served uploads shown on a frontend on another origin).
   app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 
-  // CORS — allow the configured frontend origin with credentials (cookies)
+  // CORS — allow one or more frontend origins (comma-separated in FRONTEND_URL),
+  // with credentials (cookies). Trailing slashes are ignored so a stray "/" in
+  // an env value doesn't cause a mismatch.
+  const allowedOrigins = String(env.frontendUrl)
+    .split(',')
+    .map((o) => o.trim().replace(/\/$/, ''))
+    .filter(Boolean);
   app.use(
     cors({
-      origin: env.frontendUrl,
+      origin: (origin, cb) => {
+        // Allow non-browser tools (no Origin header) and any listed origin.
+        if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ''))) return cb(null, true);
+        return cb(new Error(`Not allowed by CORS: ${origin}`));
+      },
       credentials: true,
     })
   );
