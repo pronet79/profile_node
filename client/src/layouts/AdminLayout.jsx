@@ -1,7 +1,7 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, FolderKanban, MessageSquareQuote, Mail, HeartHandshake,
-  Briefcase, Layers, Wrench, FileText, Settings, LogOut, Code2, BarChart3, Award,
+  Briefcase, Layers, Wrench, FileText, Settings, LogOut, Code2, BarChart3, Award, ScrollText,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
 import Seo from '../components/Seo.jsx';
@@ -18,6 +18,7 @@ const nav = [
   { to: '/admin/skills', label: 'Skills', icon: Layers },
   { to: '/admin/certifications', label: 'Certifications', icon: Award },
   { to: '/admin/blog', label: 'Blog', icon: FileText },
+  { to: '/admin/legal', label: 'Legal Pages', icon: ScrollText },
   { to: '/admin/settings', label: 'Settings', icon: Settings },
 ];
 

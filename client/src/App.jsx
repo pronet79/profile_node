@@ -27,6 +27,7 @@ const AdminExperience = lazy(() => import('./pages/admin/Experience.jsx'));
 const AdminServices = lazy(() => import('./pages/admin/Services.jsx'));
 const AdminSkills = lazy(() => import('./pages/admin/Skills.jsx'));
 const AdminCertifications = lazy(() => import('./pages/admin/Certifications.jsx'));
+const AdminLegal = lazy(() => import('./pages/admin/Legal.jsx'));
 const AdminBlog = lazy(() => import('./pages/admin/BlogAdmin.jsx'));
 const AdminSettings = lazy(() => import('./pages/admin/Settings.jsx'));
 
@@ -65,6 +66,7 @@ export default function App() {
           <Route path="services" element={<AdminServices />} />
           <Route path="skills" element={<AdminSkills />} />
           <Route path="certifications" element={<AdminCertifications />} />
+          <Route path="legal" element={<AdminLegal />} />
           <Route path="blog" element={<AdminBlog />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>

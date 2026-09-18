@@ -104,6 +104,11 @@ export const serviceSchema = z.object({
   published: z.coerce.boolean().optional(),
 });
 
+export const legalSchema = z.object({
+  title: nonEmpty('Title', 200),
+  content: z.string().optional().or(z.literal('')),
+});
+
 export const certificationSchema = z.object({
   title: nonEmpty('Title', 200),
   issuer: z.string().optional().or(z.literal('')),

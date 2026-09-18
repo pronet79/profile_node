@@ -14,6 +14,7 @@ import { Experience } from '../models/Experience.js';
 import { BlogPost } from '../models/BlogPost.js';
 import { Testimonial } from '../models/Testimonial.js';
 import { Certification } from '../models/Certification.js';
+import { LegalPage } from '../models/LegalPage.js';
 
 const SKILLS = {
   Backend: ['PHP', 'Laravel 8–12', 'CodeIgniter', 'Node.js', 'Express.js'],
@@ -233,6 +234,43 @@ async function run() {
       },
     ]);
     logger.info('Seeded 4 certifications/profiles.');
+  }
+
+  if ((await LegalPage.countDocuments()) === 0) {
+    await LegalPage.insertMany([
+      {
+        slug: 'privacy',
+        title: 'Privacy Policy',
+        content: `This website collects only the information you choose to submit through its contact, feedback and support forms — such as your name, email and message.
+
+Submitted data is stored securely and used solely to respond to your inquiry, review feedback, or process a voluntary support payment. It is not sold or shared for advertising.
+
+Payment processing is handled by a third-party gateway; no card or UPI credentials are ever stored on this site.
+
+To request access to or deletion of your data, contact the email listed in the footer.`,
+      },
+      {
+        slug: 'terms',
+        title: 'Terms of Use',
+        content: `By using this website you agree to use it lawfully and not to attempt to disrupt or gain unauthorized access to its systems.
+
+All content, code samples and project descriptions are provided for informational purposes. Project engagements are governed by separate written agreements.
+
+The site is provided "as is" without warranties of any kind to the extent permitted by law.`,
+      },
+      {
+        slug: 'payment-policy',
+        title: 'Payment & Refund Policy',
+        content: `**Support payments are voluntary.** Tips made through the "Support My Work" section are optional contributions and do not purchase any product or service.
+
+Because contributions are voluntary and non-transactional, they are generally non-refundable. If a payment was made in error, contact the email in the footer within 7 days and a refund will be considered case by case.
+
+All payments are processed and verified through a secure third-party gateway. No sensitive payment credentials are stored on this website.
+
+For any payment question, reach out via the contact details in the footer.`,
+      },
+    ]);
+    logger.info('Seeded 3 legal pages.');
   }
 
   await mongoose.disconnect();
