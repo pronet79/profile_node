@@ -2,7 +2,7 @@ import { useCountUp } from '../hooks/useCountUp.js';
 import { useSettings } from '../context/SettingsContext.jsx';
 
 const DEFAULT_STATS = [
-  { value: '10', suffix: '+', label: 'Years Experience' },
+  { value: '12', suffix: '+', label: 'Years Experience' },
   { value: '50', suffix: '+', label: 'Successful Projects Shipped' },
   { value: '25', suffix: '+', label: 'Technologies & Tools' },
   { value: '6', suffix: '+', label: 'Business Domains' },
