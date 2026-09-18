@@ -32,11 +32,11 @@ export default function AdminLayout() {
     <div className="flex min-h-screen bg-ink-950">
       <Seo title="Admin — Dashboard" noindex />
       <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-white/5 bg-ink-900 p-4 md:flex">
-        <div className="flex items-center gap-2 px-2 py-3 font-bold">
+        <div className="flex shrink-0 items-center gap-2 px-2 py-3 font-bold">
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-accent/15 text-accent"><Code2 className="h-5 w-5" /></span>
           Admin
         </div>
-        <nav className="mt-4 flex-1 space-y-1">
+        <nav className="admin-nav mt-4 min-h-0 flex-1 space-y-1 overflow-y-auto pr-1">
           {nav.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}
@@ -52,7 +52,7 @@ export default function AdminLayout() {
             </NavLink>
           ))}
         </nav>
-        <div className="border-t border-white/5 pt-3">
+        <div className="shrink-0 border-t border-white/5 pt-3">
           <p className="px-3 text-xs text-slate-500">{admin?.email}</p>
           <button onClick={handleLogout} className="mt-2 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-400 hover:bg-white/5 hover:text-white">
             <LogOut className="h-4 w-4" /> Log out
