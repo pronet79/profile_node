@@ -13,6 +13,7 @@ import { Project } from '../models/Project.js';
 import { Experience } from '../models/Experience.js';
 import { BlogPost } from '../models/BlogPost.js';
 import { Testimonial } from '../models/Testimonial.js';
+import { Certification } from '../models/Certification.js';
 
 const SKILLS = {
   Backend: ['PHP', 'Laravel 8–12', 'CodeIgniter', 'Node.js', 'Express.js'],
@@ -206,6 +207,32 @@ async function run() {
   if ((await Testimonial.countDocuments()) === 0) {
     await Testimonial.insertMany(TESTIMONIALS);
     logger.info(`Seeded ${TESTIMONIALS.length} testimonials.`);
+  }
+
+  if ((await Certification.countDocuments()) === 0) {
+    await Certification.insertMany([
+      {
+        title: 'Codolio — Competitive Programming Profile', issuer: 'Codolio', category: 'profile',
+        url: 'https://codolio.com/profile/pradoshprofile', icon: 'code-2', order: 0,
+        description: 'My competitive programming and coding activity across platforms.',
+      },
+      {
+        title: 'HackerRank Skill Certificate', issuer: 'HackerRank', category: 'certification',
+        url: 'https://www.hackerrank.com/certificates/iframe/58e6508c9fce', icon: 'award', order: 1,
+        description: 'Verified certificate validating problem-solving and coding expertise.',
+      },
+      {
+        title: 'AI Career Accelerator Certificate', issuer: 'AI Career Accelerator', category: 'certification',
+        url: 'https://app.aicareeraccelerator.in/certificate/GWL4nsmMDewnt70', icon: 'sparkles', order: 2,
+        description: 'Verified technical certification.',
+      },
+      {
+        title: 'AI Career Accelerator Certificate', issuer: 'AI Career Accelerator', category: 'certification',
+        url: 'https://app.aicareeraccelerator.in/certificate/kuxg51VMELe6AyG', icon: 'sparkles', order: 3,
+        description: 'Verified technical certification.',
+      },
+    ]);
+    logger.info('Seeded 4 certifications/profiles.');
   }
 
   await mongoose.disconnect();

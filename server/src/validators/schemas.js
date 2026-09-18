@@ -104,6 +104,18 @@ export const serviceSchema = z.object({
   published: z.coerce.boolean().optional(),
 });
 
+export const certificationSchema = z.object({
+  title: nonEmpty('Title', 200),
+  issuer: z.string().optional().or(z.literal('')),
+  category: z.enum(['certification', 'profile']).default('certification'),
+  url: nonEmpty('URL', 500),
+  image: z.string().optional().or(z.literal('')),
+  description: z.string().optional().or(z.literal('')),
+  icon: z.string().optional().or(z.literal('')),
+  order: z.coerce.number().optional(),
+  published: z.coerce.boolean().optional(),
+});
+
 export const skillSchema = z.object({
   category: z.enum(['Backend', 'Frontend', 'Database', 'APIs & Integrations', 'DevOps / Cloud', 'AI']),
   name: nonEmpty('Name', 80),
